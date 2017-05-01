@@ -59,15 +59,22 @@ create table Staff (
 member_id integer primary key references Olympic_Member(member_id));
 
 
-create trigger Members_Total 
+create or replace trigger Members_Total 
 before insert on Olympic_Member
-referencing new as N
 for each row
-when (Count(*) from Athlete where Athlete.member_id = N.member_id add count(*) from Official where Official.member_id = N.member_id = 0)
+declare total_participation exception;
+athlete_count integer;
+official_count integer;
 begin
-raise exception 'Action violates total covering constraint'
+Select count(*) into athlete_count from Athlete where Athlete.member_id = :new.member_id; 
+Select count(*) into official_count from Official where Official.member_id = :new.member_id;
+if athlete_count+official_count>0
+then
+raise total_participation;
+end if;
 end;
-drop table Journey;
+
+drop trigger Members_Total;
 
 create table Journey(
 start_time timestamp not null,
@@ -86,8 +93,6 @@ result_type varchar(20) not null,
 sport_name varchar(20) not null references Sport(sport_name), 
 venue_name varchar(20) not null references Sport_Venue(venue_name));
 
---create domain medal_type varchar(6) default null check(value in('gold','silver','bronze'));
-
 create table Participates (
 athelete_id integer references Athlete(member_id), 
 event_name varchar(20) references Event(event_name), 
@@ -102,18 +107,16 @@ drop table Journey;
 
 create table Books (
 when_booked timestamp not null, 
-start_time timestamp not null references Journey(start_time), 
-start_date date not null references Journey(start_date), 
+start_time timestamp not null, 
+start_date date not null, 
 member_id integer references Olympic_Member(member_id), 
 staff_id integer not null references Staff(member_id), 
-vehicle_code varchar(8) not null references Vehicle(code),
-constraint unique_Books primary key(start_time,start_date,vehicle_code,staff_id));
-
-
+vehicle_code varchar(8) not null,
+constraint unique_Books primary key(start_time,start_date,vehicle_code,staff_id),
+constraint for_key foreign key(start_time,start_date,vehicle_code) references Journey(start_time,start_date,vehicle_code));
 
 create table Runs (
 event_name varchar(20) references Event(event_name), 
 official_id integer references Official(member_id), 
 official_role varchar(20) not null,
-event_name not null, 
-official_id not null);
+constraint pk_Runs primary key(event_name,official_id));
