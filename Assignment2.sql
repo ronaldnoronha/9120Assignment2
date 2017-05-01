@@ -35,31 +35,48 @@ constraint unique_gps unique(gps_longitude,gps_latitude));
 
 create table Accommodation(
 accommodation_name varchar(20) primary key, 
-foreign key (accommodation_name) references Place(place_name) on delete cascade on update cascade);
+foreign key (accommodation_name) references Place(place_name) on delete cascade);
+--foreign key (accommodation_name) references Place(place_name) on update cascade);-- on update cascade);
 
 create table Sport_Venue (
 venue_name varchar(20) primary key, 
-foreign key (venue_name) references Place(place_name) on delete cascade on update cascade);
+foreign key (venue_name) references Place(place_name) on delete cascade); 
 
 create table Olympic_Member (
 member_id number(10,0) primary key,
-country_code varchar(3) references Country(code) not null,
-accommodation_name varchar(20) references Accommodation(accommodation_name), 
+country_code varchar(3) references Country(code) on delete set null,
+accommodation_name varchar(20) references Accommodation(accommodation_name) on delete set null, 
 title_name varchar(8), 
 family_name varchar(20) not null,
 given_name varchar(20) not null
 );
 
 create table Athlete (
-member_id integer primary key references Olympic_Member(member_id));
+member_id integer primary key references Olympic_Member(member_id) on delete cascade);
 
 create table Official (
-member_id integer primary key references Olympic_Member(member_id));
+member_id integer primary key references Olympic_Member(member_id) on delete cascade);
 
 create table Staff (
-member_id integer primary key references Olympic_Member(member_id));
+member_id integer primary key references Olympic_Member(member_id) on delete cascade);
+drop trigger nBooked_check;
+create or replace trigger nBooked_check
+before insert on Journey
+for each row
+declare total_capacity_reached exception;
+v_capacity integer;
+total_booked integer;
+begin
+Select sum(nbooked) into total_booked from Journey where vehicle_code = :new.vehicle_code 
+and start_time = :new.start_time and start_date = :new.start_date;
+Select vehicle_capacity into v_capacity from Vehicle where code = :new.vehicle_code;
+if (total_booked > v_capacity)
+then
+raise total_capacity_reached;
+end if;
+end;
 
-
+-- create assertion statement
 create or replace trigger Members_Total 
 before insert on Olympic_Member
 for each row
@@ -75,28 +92,44 @@ raise total_participation;
 end if;
 end;
 
+create or replace trigger disjoint_Place_Accommodation
+before insert on Accommodation
+for each row
+declare Accommodation_place exception;
+places_count integer;
+sports_venue_count integer;
+begin
+select count(*) into places_count from Place where place_name = :new.accommodation_name;
+select count(*) into sports_venue_count from Sport_Venue where venue_name = :new.accommodation_name;
+if places_count = 0 or sports_venue_count >0
+then
+raise Accommodaton_place;
+end if;
+end;
 
 
 create table Journey(
 start_time timestamp not null,
 start_date date not null,
 nbooked integer, 
-departure_from varchar(20) not null references Place(place_name), 
-destination varchar(20) not null references Place(place_name), 
-vehicle_code varchar(8) not null references Vehicle(code),
+departure_from varchar(20) not null references Place(place_name) on delete cascade, 
+destination varchar(20) not null references Place(place_name)on delete cascade, 
+vehicle_code varchar(8) not null references Vehicle(code) on delete cascade,
 constraint pk_Journey primary key(start_time, start_date, vehicle_code));
+
+
 
 create table Event (
 event_name varchar(20) primary key, 
 start_time timestamp not null, 
 start_date date not null, 
 result_type varchar(20) not null, 
-sport_name varchar(20) not null references Sport(sport_name), 
-venue_name varchar(20) not null references Sport_Venue(venue_name));
+sport_name varchar(20) not null references Sport(sport_name) on delete cascade, 
+venue_name varchar(20) not null references Sport_Venue(venue_name) on delete cascade);
 
 create table Participates (
-athelete_id integer references Athlete(member_id), 
-event_name varchar(20) references Event(event_name), 
+athelete_id integer references Athlete(member_id) on delete cascade, 
+event_name varchar(20) references Event(event_name) on delete cascade, 
 event_result varchar(20), 
 medal varchar(6) default null check(medal in ('Gold','Silver','Bronze'))); 
 
@@ -104,14 +137,14 @@ create table Books (
 when_booked timestamp not null, 
 start_time timestamp not null, 
 start_date date not null, 
-member_id integer references Olympic_Member(member_id), 
-staff_id integer not null references Staff(member_id), 
+member_id integer references Olympic_Member(member_id) on delete set null, 
+staff_id integer not null references Staff(member_id) on delete cascade, 
 vehicle_code varchar(8) not null,
 constraint unique_Books primary key(start_time,start_date,vehicle_code,staff_id),
 constraint for_key foreign key(start_time,start_date,vehicle_code) references Journey(start_time,start_date,vehicle_code));
 
 create table Runs (
-event_name varchar(20) references Event(event_name), 
-official_id integer references Official(member_id), 
+event_name varchar(20) references Event(event_name) on delete cascade, 
+official_id integer references Official(member_id) on delete cascade, 
 official_role varchar(20) not null,
 constraint pk_Runs primary key(event_name,official_id));

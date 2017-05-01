@@ -12,6 +12,10 @@ insert into Accommodation values('Olympic Village');
 
 insert into Sport_Venue values('Olympic Stadium');
 
+delete from Place where (place_name = 'Olympic Village');
+select * from Olympic_Member;
+
+
 insert into Olympic_Member values(1102033333,'AUS','Olympic Village','Mr','Ian','Thorpe');
 
 insert into Athlete values(1102033333);
@@ -24,13 +28,7 @@ insert into Olympic_Member values(3947590239,'AUS',null,'Mr','Bob','Builder');
 
 insert into Staff values(3947590239);
 
-select * from Place;
 
-create table Journey(
-start_time varchar primary key );
-
-create table Participates(
-medal varchar(6) default null check(medal in ('Gold','Silver','Bronze')));
 
 insert into Participates values(
 
