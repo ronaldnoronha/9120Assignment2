@@ -1,3 +1,20 @@
+drop trigger Members_Total;
+drop table if exists Runs;
+drop table if exists Books;
+drop table if exists Participates;
+drop table if exists Event;
+drop table if exists Journey;
+drop table if exists Staff;
+drop table if exists Official;
+drop table if exists Athlete;
+drop table if exists Olympic_Member;
+drop table if exists Sport_Venue;
+drop table if exists Accommodation;
+drop table if exists Place;
+drop table if exists Sport;
+drop table if exists Vehicle;
+drop table if exists Country;
+
 create table Country (
 code varchar(3) primary key, 
 country_name varchar(20) not null);
@@ -23,22 +40,6 @@ foreign key (accommodation_name) references Place(place_name));
 create table Sport_Venue (
 venue_name varchar(20) primary key, 
 foreign key (venue_name) references Place(place_name));
-
---drop table Athlete;
---drop table Staff;
---drop table official;
---drop table Olympic_Member;
---drop table Sport_Venue;
---drop table Accommodation;
---drop table Place;
-
---create table Olympic_Member (
---member_id number(10,0) primary key);
-
---insert into Olympic_Member values(10001000000);
-
---select * from Olympic_Member;
---drop table Olympic_Member;
 
 create table Olympic_Member (
 member_id number(10,0) primary key,
@@ -74,7 +75,7 @@ raise total_participation;
 end if;
 end;
 
-drop trigger Members_Total;
+
 
 create table Journey(
 start_time timestamp not null,
@@ -98,12 +99,6 @@ athelete_id integer references Athlete(member_id),
 event_name varchar(20) references Event(event_name), 
 event_result varchar(20), 
 medal varchar(6) default null check(medal in ('Gold','Silver','Bronze'))); 
-  
-Select * from Books; 
-drop table Books;
-drop table Participates;
-drop table Event;
-drop table Journey;
 
 create table Books (
 when_booked timestamp not null, 
