@@ -1,19 +1,19 @@
 drop trigger Members_Total;
-drop table if exists Runs;
-drop table if exists Books;
-drop table if exists Participates;
-drop table if exists Event;
-drop table if exists Journey;
-drop table if exists Staff;
-drop table if exists Official;
-drop table if exists Athlete;
-drop table if exists Olympic_Member;
-drop table if exists Sport_Venue;
-drop table if exists Accommodation;
-drop table if exists Place;
-drop table if exists Sport;
-drop table if exists Vehicle;
-drop table if exists Country;
+drop table Runs;
+drop table Books;
+drop table Participates;
+drop table Event;
+drop table Journey;
+drop table Staff;
+drop table Official;
+drop table Athlete;
+drop table Olympic_Member;
+drop table Sport_Venue;
+drop table Accommodation;
+drop table Place;
+drop table Sport;
+drop table Vehicle;
+drop table Country;
 
 create table Country (
 code varchar(3) primary key, 
@@ -35,11 +35,11 @@ constraint unique_gps unique(gps_longitude,gps_latitude));
 
 create table Accommodation(
 accommodation_name varchar(20) primary key, 
-foreign key (accommodation_name) references Place(place_name));
+foreign key (accommodation_name) references Place(place_name) on delete cascade on update cascade);
 
 create table Sport_Venue (
 venue_name varchar(20) primary key, 
-foreign key (venue_name) references Place(place_name));
+foreign key (venue_name) references Place(place_name) on delete cascade on update cascade);
 
 create table Olympic_Member (
 member_id number(10,0) primary key,
