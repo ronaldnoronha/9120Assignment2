@@ -70,8 +70,8 @@ end;
 drop table Journey;
 
 create table Journey(
-start_time timestamp,
-start_date date,
+start_time timestamp not null,
+start_date date not null,
 nbooked integer, 
 departure_from varchar(20) not null references Place(place_name), 
 destination varchar(20) not null references Place(place_name), 
@@ -95,15 +95,21 @@ event_result varchar(20),
 medal varchar(6) default null check(medal in ('Gold','Silver','Bronze'))); 
   
 Select * from Books; 
-  
+drop table Books;
+drop table Participates;
+drop table Event;
+drop table Journey;
+
 create table Books (
 when_booked timestamp not null, 
 start_time timestamp not null references Journey(start_time), 
 start_date date not null references Journey(start_date), 
 member_id integer references Olympic_Member(member_id), 
 staff_id integer not null references Staff(member_id), 
-vehicle_code varchar(8) not null references Vehicle(code)
-);
+vehicle_code varchar(8) not null references Vehicle(code),
+constraint unique_Books primary key(start_time,start_date,vehicle_code,staff_id));
+
+
 
 create table Runs (
 event_name varchar(20) references Event(event_name), 
