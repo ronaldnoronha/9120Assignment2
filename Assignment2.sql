@@ -24,13 +24,13 @@ create table Sport_Venue (
 venue_name varchar(20) primary key, 
 foreign key (venue_name) references Place(place_name));
 
-drop table Athlete;
-drop table Staff;
-drop table official;
-drop table Olympic_Member;
-drop table Sport_Venue;
-drop table Accommodation;
-drop table Place;
+--drop table Athlete;
+--drop table Staff;
+--drop table official;
+--drop table Olympic_Member;
+--drop table Sport_Venue;
+--drop table Accommodation;
+--drop table Place;
 
 --create table Olympic_Member (
 --member_id number(10,0) primary key);
@@ -70,7 +70,7 @@ end;
 drop table Journey;
 
 create table Journey(
-start_time time,
+start_time timestamp,
 start_date date,
 nbooked integer, 
 departure_from varchar(20) not null references Place(place_name), 
@@ -80,13 +80,11 @@ constraint pk_Journey primary key(start_time, start_date, vehicle_code));
 
 create table Event (
 event_name varchar(20) primary key, 
-start_time time not null, 
+start_time timestamp not null, 
 start_date date not null, 
 result_type varchar(20) not null, 
-sport_name varchar(20) references Sport(sport_name), 
-venue_name varchar(20) reference Venue(venue_name),
-sport_name not null,
-venue_name not null);
+sport_name varchar(20) not null references Sport(sport_name), 
+venue_name varchar(20) not null references Sport_Venue(venue_name));
 
 --create domain medal_type varchar(6) default null check(value in('gold','silver','bronze'));
 
@@ -96,17 +94,16 @@ event_name varchar(20) references Event(event_name),
 event_result varchar(20), 
 medal varchar(6) default null check(medal in ('Gold','Silver','Bronze'))); 
   
+Select * from Books; 
+  
 create table Books (
 when_booked timestamp not null, 
-start_time time references Journey(start_time), 
-start_date date references Journey(start_date), 
+start_time timestamp not null references Journey(start_time), 
+start_date date not null references Journey(start_date), 
 member_id integer references Olympic_Member(member_id), 
-staff_id integer references Staff(member_id), 
-vehicle_code varchar(8) references Vehicle(code),
-start_time not null,
-start_date not null,
-staff_id not null,
-vehicle_code not null);
+staff_id integer not null references Staff(member_id), 
+vehicle_code varchar(8) not null references Vehicle(code)
+);
 
 create table Runs (
 event_name varchar(20) references Event(event_name), 
