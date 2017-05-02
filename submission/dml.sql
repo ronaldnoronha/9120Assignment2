@@ -54,4 +54,6 @@ insert into Event values('100m Freestyle',to_timestamp('2017-05-15 07:00','yyyy-
 
 insert into Participates values(1102033333,'100m Freestyle','123.03s','Silver');
 
+insert into Journey values(to_timestamp('07:00','hh24:mi'),to_date('2017-05-15','yyyy-mm-dd'), 101, 'Olympic Village', 'Olympic Pool', '8wxj8394');
+
 
