@@ -74,8 +74,9 @@ start_date date not null,
 member_id integer references Member(member_id) on delete set null, 
 staff_id integer not null references Staff(member_id) on delete cascade, 
 vehicle_code varchar(8) not null,
-constraint unique_Books primary key(start_time,start_date,vehicle_code,staff_id),
-constraint for_key foreign key(start_time,start_date,vehicle_code) references Journey(start_time,start_date,vehicle_code));
+constraint for_key foreign key(start_time,start_date,vehicle_code) references Journey(start_time,start_date,vehicle_code),
+constraint unique_Books primary key(start_time,start_date,vehicle_code,staff_id)
+);
 
 create table Runs (
 event_name varchar(20) references Event(event_name) on delete cascade, 
