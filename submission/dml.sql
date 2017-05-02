@@ -58,4 +58,4 @@ insert into Journey values(to_timestamp('2017-05-15 07:00','yyyy-mm-dd hh24:mi')
 
 insert into Books values(to_timestamp('2017-05-14 07:00','yyyy-mm-dd hh24:mi'),to_timestamp('2017-05-15 07:00','yyyy-mm-dd hh24:mi'),to_date('2017-05-15','yyyy-mm-dd'),1102033333,3947590239,'8wxj8394');
 
-insert into Runs values('100m Freestyle',0048234748,'Cleaner');
+insert into Runs values('100m Freestyle',0048234748,'Performer');

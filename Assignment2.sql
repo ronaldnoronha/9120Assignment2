@@ -8,13 +8,15 @@ drop table Journey;
 drop table Staff;
 drop table Official;
 drop table Athlete;
-drop table Olympic_Member;
-drop table Sport_Venue;
+drop table Member;
+drop table Venue;
 drop table Accommodation;
 drop table Place;
 drop table Sport;
 drop table Vehicle;
 drop table Country;
+
+select * from Place;
 
 create table Country (
 code varchar(3) primary key, 
@@ -63,18 +65,23 @@ member_id integer primary key references Olympic_Member(member_id) on delete cas
 
 drop trigger nBooked_check;
 create or replace trigger nBooked_check
-before insert on Journey
+before insert on Books
 for each row
 declare total_capacity_reached exception;
 v_capacity integer;
 total_booked integer;
 begin
-Select sum(nbooked) into total_booked from Journey where vehicle_code = :new.vehicle_code 
-and start_time = :new.start_time and start_date = :new.start_date;
+--update nbooked
+--violation of capacity
+Select sum(nbooked) into total_booked from Journey where (vehicle_code = :new.vehicle_code  
+and start_time = :new.start_time and start_date = :new.start_date);
 Select vehicle_capacity into v_capacity from Vehicle where code = :new.vehicle_code;
-if (total_booked > v_capacity)
+if (total_booked+1 > v_capacity)
 then
 raise total_capacity_reached;
+else 
+update Journey set nbooked = total_booked+1 where (vehicle_code = :new.vehicle_code  
+and start_time = :new.start_time and start_date = :new.start_date);
 end if;
 end;
 
