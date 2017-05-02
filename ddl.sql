@@ -82,4 +82,23 @@ official_id integer references Official(member_id) on delete cascade,
 official_role varchar(20) not null,
 constraint pk_Runs primary key(event_name,official_id));
 
-
+create or replace trigger nBooked_check
+before insert on Books
+for each row
+declare total_capacity_reached exception;
+v_capacity integer;
+total_booked integer;
+begin
+--update nbooked
+--violation of capacity
+Select sum(nbooked) into total_booked from Journey where (vehicle_code = :new.vehicle_code  
+and start_time = :new.start_time and start_date = :new.start_date);
+Select vehicle_capacity into v_capacity from Vehicle where code = :new.vehicle_code;
+if (total_booked+1 > v_capacity)
+then
+raise total_capacity_reached;
+else 
+update Journey set nbooked = total_booked+1 where (vehicle_code = :new.vehicle_code  
+and start_time = :new.start_time and start_date = :new.start_date);
+end if;
+end;
