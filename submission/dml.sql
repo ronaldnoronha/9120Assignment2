@@ -52,5 +52,6 @@ insert into Staff values(5768653024);
 
 insert into Event values('100m Freestyle',to_timestamp('2017-05-15 07:00','yyyy-mm-dd hh24:mi'),to_date('2017-05-15','yyyy-mm-dd'),'time','Swimming','Olympic Stadium');
 
+insert into Participates values(1102033333,'100m Freestyle','123.03s','Silver');
 
 
