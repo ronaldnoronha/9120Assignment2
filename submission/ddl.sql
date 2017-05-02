@@ -4,7 +4,7 @@ code varchar(3) primary key,
 name varchar(20) not null);
 
 create table Vehicle (
-code varchar2(8) primary key, 
+code varchar2(8) primary key check(length(code) =8), 
 vehicle_capacity integer not null);
 
 create table Sport(sport_name varchar(20) primary key);
