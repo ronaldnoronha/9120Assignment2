@@ -16,8 +16,6 @@ drop table Sport;
 drop table Vehicle;
 drop table Country;
 
-select * from Place;
-
 create table Country (
 code varchar(3) primary key, 
 country_name varchar(20) not null);
