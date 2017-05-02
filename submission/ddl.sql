@@ -47,8 +47,8 @@ create table Journey(
 start_time timestamp not null,
 start_date date not null,
 nbooked integer, 
-departure_from varchar(20) not null references Place(place_name) on delete cascade, 
-destination_to varchar(20) not null references Place(place_name)on delete cascade, 
+"from" varchar(20) not null references Place(place_name) on delete cascade, 
+"to" varchar(20) not null references Place(place_name)on delete cascade, 
 vehicle_code varchar(8) not null references Vehicle(code) on delete cascade,
 constraint pk_Journey primary key(start_time, start_date, vehicle_code));
 
