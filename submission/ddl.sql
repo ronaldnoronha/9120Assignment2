@@ -20,7 +20,6 @@ constraint unique_gps unique(gps_longitude,gps_latitude));
 create table Accommodation(
 accommodation_name varchar(20) primary key, 
 foreign key (accommodation_name) references Place(place_name) on delete cascade);
---foreign key (accommodation_name) references Place(place_name) on update cascade);-- on update cascade);
 
 create table Venue (
 venue_name varchar(20) primary key, 
