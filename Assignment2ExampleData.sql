@@ -28,29 +28,11 @@ insert into Olympic_Member values(3947590239,'AUS',null,'Mr','Bob','Builder');
 
 insert into Staff values(3947590239);
 
+--create table experiment_time(start_date date primary key);--
 
+--insert into experiment_time values(TO_DATE('15-May-2017','dd-mon-yyyy'));--
 
-insert into Participates values(
-
-
-
-
-
-
-
-drop table Libraryitem;
-
-create table Libraryitem(call_num integer primary key, title varchar(30));
-create table Book( call_num integer primary key references Libraryitem(call_num), pages_book integer not null);
-create table Dvd(call_num integer primary key references Libraryitem(call_num), duration_time integer not null);
-
-create trigger Del_items
-after delete on Book
-for each row
-when ((select count(*) from Dvd where call_num=:OLD.call_num) =0 )
-begin
-delete from Libraryitem where call_num = :OLD.call_num
-end;
+insert into Event values('100m Freestyle',to_timestamp('2017-05-15 07:00','yyyy-mm-dd hh24:mi'),to_date('2017-05-15','yyyy-mm-dd'),'time','Swimming','Olympic Stadium');
 
 
 
