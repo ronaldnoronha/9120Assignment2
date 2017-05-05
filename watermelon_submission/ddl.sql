@@ -102,3 +102,5 @@ update Journey set nbooked = total_booked+1 where (vehicle_code = :new.vehicle_c
 and start_time = :new.start_time and start_date = :new.start_date);
 end if;
 end;
+
+--create assertion Capacity_exceeded check(exists(select * from Journey where(nbooked>Vehicle.vehicle_capacity and Vehicle.code = vehicle_code);

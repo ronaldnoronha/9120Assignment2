@@ -54,9 +54,24 @@ insert into Event values('100m Freestyle',to_timestamp('2017-05-15 07:00','yyyy-
 
 insert into Participates values(1102033333,'100m Freestyle','123.03s','Silver');
 
+-- Showing trigger works
+
 insert into Journey values(to_timestamp('2017-05-15 07:00','yyyy-mm-dd hh24:mi'),to_date('2017-05-15','yyyy-mm-dd'), 0, 'Olympic Village', 'Olympic Pool', '8wxj8394');
+
+select * from Vehicle;
+select * from Journey;
 
 insert into Books values(to_timestamp('2017-05-14 07:00','yyyy-mm-dd hh24:mi'),to_timestamp('2017-05-15 07:00','yyyy-mm-dd hh24:mi'),to_date('2017-05-15','yyyy-mm-dd'),1102033333,3947590239,'8wxj8394');
 insert into Books values(to_timestamp('2017-05-14 07:01','yyyy-mm-dd hh24:mi'),to_timestamp('2017-05-15 07:00','yyyy-mm-dd hh24:mi'),to_date('2017-05-15','yyyy-mm-dd'),1102033333,3947590239,'8wxj8394');
 
+select * from Journey;
+
+insert into Books values(to_timestamp('2017-05-14 07:02','yyyy-mm-dd hh24:mi'),to_timestamp('2017-05-15 07:00','yyyy-mm-dd hh24:mi'),to_date('2017-05-15','yyyy-mm-dd'),1102033333,3947590239,'8wxj8394');
+
+select * from Journey;
+
 insert into Runs values('100m Freestyle',0048234748,'Performer');
+
+
+
+
